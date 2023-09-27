@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\ServicoConta;
 use App\Exceptions\ContaException;
+use Illuminate\Http\Response;
 
 class ObterContaController extends Controller
 {
@@ -24,6 +25,6 @@ class ObterContaController extends Controller
             return response()->json(['error' => 'Ocorreu um erro durante a obtenção da conta.'], 500, [], JSON_UNESCAPED_UNICODE);
         }
 
-        return response()->json($resultadoObterConta, 200);
+        return new Response($resultadoObterConta, 200);
     }
 }
