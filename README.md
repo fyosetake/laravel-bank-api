@@ -104,6 +104,16 @@ php artisan migrate
 
 ```
 
+## Instruções para testes
+
+Para rodar os testes de unidade, basta executar o seguinte comando:
+
+```bash
+
+php artisan test
+
+```
+
 ## Instruções de uso
 
 Conforme o desafio proposto, o uso pode ser assim definido:
