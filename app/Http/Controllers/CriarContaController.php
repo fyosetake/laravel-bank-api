@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Services\ServicoConta;
 
 class CriarContaController extends Controller
@@ -31,6 +32,6 @@ class CriarContaController extends Controller
             return response()->json(['error' => 'Ocorreu um erro durante a criação da conta.'], 500, [], JSON_UNESCAPED_UNICODE);
         }
 
-        return response()->json($resultadoCriarConta, 201);
+        return new Response($resultadoCriarConta, 201);
     }
 }
