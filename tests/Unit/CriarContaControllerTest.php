@@ -31,7 +31,7 @@ class CriarContaControllerTest extends TestCase
         
         $resposta = $criarContaController->criarConta($request);
         
-        $this->assertEquals(201, $resposta->getStatusCode());
-        $this->assertEquals(json_encode($resultadoEsperado), $resposta->getContent());
+        $this->assertSame(201, $resposta->getStatusCode());
+        $this->assertSame(json_encode($resultadoEsperado), $resposta->getContent());
     }
 }
