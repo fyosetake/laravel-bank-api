@@ -1,28 +1,22 @@
-# Use a imagem oficial do PHP 8.1 como base
-FROM php:8.1-fpm
+# Usa a imagem oficial do PHP na versão 8.2
+FROM php:8.2-fpm
 
-# Instale dependências do Laravel e Supervisor
+# Instala as dependências necessárias para o Laravel e o cron
 RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
     libzip-dev \
-    supervisor \
+    zip \
+    unzip \
+    cron \
     && docker-php-ext-install zip pdo_mysql
 
-# Copie os arquivos do Laravel para o container
-COPY . /var/www/html
-
-# Configure permissões de armazenamento do Laravel
-RUN chown -R www-data:www-data /var/www/html/storage
-
-# Instale o Composer
+# Instala o Composer globalmente
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Instale as dependências do Composer
-RUN cd /var/www/html && composer install
+# Copia os arquivos do seu projeto para o contêiner
+COPY . /var/www/html
 
-# Exponha a porta 3000 para o servidor PHP-FPM
-EXPOSE 3000
+# Define o diretório de trabalho
+WORKDIR /var/www/html
 
-# Comando para iniciar o Supervisor, que executará PHP-FPM e o servidor PHP embutido
-CMD ["/usr/bin/supervisord"]
+# Expõe a porta 80
+EXPOSE 80
