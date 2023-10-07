@@ -2,36 +2,31 @@
 
 namespace App\Services;
 
-use App\Models\CarteiraDigital;
+use App\Repositories\ContaRepository;
 use App\Exceptions\ContaException;
 
 class ServicoConta
 {
+    private $contaRepository;
+
+    public function __construct(ContaRepository $contaRepository)
+    {
+        $this->contaRepository = $contaRepository;
+    }
+
     public function criarConta($contaId, $valor)
     {
-        $carteiraDigital = new CarteiraDigital();
-        $carteiraDigital->conta_id = $contaId;
-        $carteiraDigital->saldo = $valor;
-
-        $carteiraDigital->save();
-
-        return [
-            'conta_id' => $contaId,
-            'saldo' => $valor,
-        ];
+        return $this->contaRepository->criarConta($contaId, $valor);
     }
 
     public function obterConta($contaId)
     {
-        $conta = CarteiraDigital::where('conta_id', $contaId)->first();
+        $conta = $this->contaRepository->obterConta($contaId);
 
         if (!$conta) {
             throw new ContaException();
         }
 
-        return [
-            'conta_id' => $conta->conta_id,
-            'saldo' => $conta->saldo,
-        ];
+        return $conta;
     }
 }
