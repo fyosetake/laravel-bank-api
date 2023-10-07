@@ -2,40 +2,36 @@
 
 namespace App\Services;
 
-use App\Models\CarteiraDigital;
-use App\Models\Transacao;
+use App\Repositories\ContaRepository;
+use App\Repositories\TransacaoRepository;
 use App\Exceptions\TransacaoException;
 
 class ServicoTransacao
 {
+    private $contaRepository;
+    private $transacaoRepository;
+
+    public function __construct(ContaRepository $contaRepository, TransacaoRepository $transacaoRepository)
+    {
+        $this->contaRepository = $contaRepository;
+        $this->transacaoRepository = $transacaoRepository;
+    }
+
     public function realizarTransacao($formaPagamento, $contaId, $valor)
     {
-        $contaCarteiraDigital = CarteiraDigital::where('conta_id', $contaId)->first();
-        $transacao = new Transacao();
-
-        $transacao->conta_id = $contaId;
-        $transacao->forma_pagamento = $formaPagamento;
-        $transacao->valor = $valor;
+        $conta = $this->contaRepository->obterConta($contaId);
 
         $saldoAposTransacao = match ($formaPagamento) {
-            'P' => $contaCarteiraDigital->saldo - $valor,
-            'C' => $contaCarteiraDigital->saldo - $valor * 1.05,
-            'D' => $contaCarteiraDigital->saldo - $valor * 1.03,
-            default => $contaCarteiraDigital->saldo,
+            'P' => $conta->saldo - $valor,
+            'C' => $conta->saldo - $valor * 1.05,
+            'D' => $conta->saldo - $valor * 1.03,
+            default => $conta->saldo,
         };
 
         if ($saldoAposTransacao < 0) {
             throw new TransacaoException;
         }
 
-        $contaCarteiraDigital->saldo = $saldoAposTransacao;
-
-        $contaCarteiraDigital->save();
-        $transacao->save();
-
-        return [
-            'conta_id' => $contaId,
-            'saldo' => $contaCarteiraDigital->saldo,
-        ];
+        return $this->transacaoRepository->realizarTransacao($contaId, $valor, $formaPagamento, $saldoAposTransacao);
     }
 }
