@@ -4,8 +4,8 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    image: api-tray
-    container_name: api-tray
+    image: api-laravel
+    container_name: api-bank
     working_dir: /var/www/html
     volumes:
       - .:/var/www/html
@@ -20,7 +20,7 @@ services:
 
   mysql:
     image: mysql:latest
-    container_name: db-tray
+    container_name: db-bank
     ports:
       - "3306:3306"
     restart: always
