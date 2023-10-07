@@ -10,5 +10,4 @@ class CarteiraDigital extends Model
     use HasFactory;
 
     protected $table = 'conta';
-
 }
