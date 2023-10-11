@@ -34,11 +34,11 @@ cd laravel-bank-api
 
 ```
 
-3. Instale as dependências do Composer:
+3. Gere o arquivo '.env' à partir do '.env.example':
 
 ```bash
 
-composer install
+cp .env.example .env
 
 ```
 
@@ -60,13 +60,11 @@ docker-compose up -dV
 
 ```
 
-## Configurar o DB_HOST no Laravel
+## Execute as Migrations
 
-Para configurar o `DB_HOST` no arquivo `.env` do Laravel com o nome do container Docker MySQL, siga estas etapas:
+Para executar as Migrations, acesse o container do Laravel:
 
-1. Certifique-se de que o contêiner MySQL esteja em execução.
-
-2. No terminal, execute o seguinte comando para obter o nome do contêiner MySQL:
+1. Certifique-se de que o container esteja em execução.
 
 ```bash
 
@@ -74,51 +72,53 @@ docker ps
 
 ```
 
-3. Na lista resultante, encontre o contêiner MySQL e copie o nome listado na coluna "NAMES".
+2. Os próximo comandos serão direcionados para o container, bastando executá-los no diretório do projeto.
 
-4. Abra o arquivo `.env` no diretório do seu projeto Laravel.
-
-5. Encontre a variável DB_HOST no arquivo `.env`.
-
-6. Substitua o valor existente de `DB_HOST` pelo nome do contêiner Docker MySQL que você copiou na etapa 3.
-
-7. Salve o arquivo `.env`.
-
-Agora, o Laravel estará configurado para se conectar ao seu contêiner MySQL quando você executar a aplicação.
-
-## Executar as migrações
-
-1. Acesse o container do Laravel:
+3. Execute o 'composer install':
 
 ```bash
 
-docker exec -it nome-do-container-laravel bash
+docker exec api-laravel composer install
 
 ```
 
-2. No container, execute o comando Artisan para executar as migrações:
+4. Execute o comando para gerar uma 'chave de aplicativo' Laravel:
 
 ```bash
 
-php artisan migrate
+docker exec api-laravel php artisan key:generate
 
 ```
 
-## Instruções para testes
-
-Para rodar os testes de unidade, basta executar o seguinte comando:
+4. Execute o comando Artisan para rodar as Migrations:
 
 ```bash
 
-php artisan test
+docker exec api-laravel php artisan migrate
+
+```
+
+6. Rode os testes unitários:
+
+```bash
+
+docker exec api-laravel php artisan test
+
+```
+
+7. Inicie o servidor de desenvolvimento embutido no Laravel:
+
+```bash
+
+docker exec api-laravel php artisan serve --host=0.0.0.0 --port=80
 
 ```
 
 ## Instruções de uso
 
-Conforme o desafio proposto, o uso pode ser assim definido:
+O uso pode ser assim definido:
 
-1. Validar se uma conta existe (conta_id 1, por exemplo)
+1. Validar se uma conta existe (conta_i = 1, por exemplo)
 
 ```bash
 
