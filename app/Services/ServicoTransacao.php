@@ -11,6 +11,9 @@ class ServicoTransacao
     private $contaRepository;
     private $transacaoRepository;
 
+    const TAXA_DEBITO = 1.03;
+    const TAXA_CREDITO = 1.05;
+
     public function __construct(ContaRepository $contaRepository, TransacaoRepository $transacaoRepository)
     {
         $this->contaRepository = $contaRepository;
@@ -23,8 +26,8 @@ class ServicoTransacao
 
         $saldoAposTransacao = match ($formaPagamento) {
             'P' => $conta->saldo - $valor,
-            'C' => $conta->saldo - $valor * 1.05,
-            'D' => $conta->saldo - $valor * 1.03,
+            'C' => $conta->saldo - $valor * self::TAXA_CREDITO,
+            'D' => $conta->saldo - $valor * self::TAXA_DEBITO,
             default => $conta->saldo,
         };
 
