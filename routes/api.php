@@ -2,8 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ObterContaController;
-use App\Http\Controllers\CriarContaController;
+use App\Http\Controllers\ContaController;
 use App\Http\Controllers\TransacaoController;
 
 /*
@@ -21,8 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/criarConta', [CriarContaController::class, 'criarConta']);
+Route::post('/criarConta', [ContaController::class, 'criarConta']);
 
-Route::get('/obterConta/{conta_id}', [ObterContaController::class, 'obterConta']);
+Route::get('/obterConta/{conta_id}', [ContaController::class, 'obterConta']);
 
 Route::post('/transacao', [TransacaoController::class, 'processarTransacao']);
