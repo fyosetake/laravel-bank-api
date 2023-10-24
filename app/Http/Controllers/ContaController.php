@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Services\ServicoConta;
+use App\Exceptions\ContaException;
 
 class CriarContaController extends Controller
 {
@@ -33,5 +34,18 @@ class CriarContaController extends Controller
         }
 
         return new Response($resultadoCriarConta, 201);
+    }
+
+    public function obterConta($conta_id)
+    {
+        try {
+            $resultadoObterConta = $this->servicoConta->obterConta($conta_id);
+        } catch (ContaException $e) {
+            return response()->json(['error' => $e->getMessage()], $e->getStatusCode(), [], JSON_UNESCAPED_UNICODE);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Ocorreu um erro durante a obtenção da conta.'], 500, [], JSON_UNESCAPED_UNICODE);
+        }
+
+        return new Response($resultadoObterConta, 200);
     }
 }
